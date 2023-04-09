@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Xdarko\TwillAutoTranslate\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class TwillAutoTranslateCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'twill-auto-translate';
 
     public $description = 'My command';
 
