@@ -40,7 +40,8 @@ trait HandleAutoTranslate
                         return [$attr => $publish ? 1 : 0];
                     }
 
-                    $old_result = $model->translate($locale)->$attr;
+                    $modelTranslated = $model->translate($locale);
+                    $old_result = $modelTranslated?->$attr;
 
                     $string = $baseValues->$attr;
                     $base_locale = $defaultLocale;
