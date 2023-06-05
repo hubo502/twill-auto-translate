@@ -47,10 +47,10 @@ trait HandleAutoTranslate
                     $base_locale = $defaultLocale;
                     $translate_locale = $locale;
 
-                    if (! $string) {
+                    if (!$string) {
                         $result = $string;
                     } else {
-                        $result = ($old_result && ! $force)
+                        $result = ($old_result && !$force)
                             ? $old_result
                             : app(TwillAutoTranslate::class)->translateString($string, $translate_locale, $base_locale);
                     }
@@ -88,6 +88,23 @@ trait HandleAutoTranslate
         if ($enabled) {
             $fields = $this->translateFields($object, $fields, $force, $publish);
             $fields = $this->translateBlocks($fields, $force);
+            $fields = $this->translateMetadata($fields, $force);
+        }
+
+        return $fields;
+    }
+
+    protected function translateMetadata($fields, $force)
+    {
+        if (method_exists($this, 'getMetadataFields')) {
+            $metadata_fields = collect($this->getMetadataFields($fields))
+                ->filter(function ($field, $key) {
+                    return in_array($key, config('twill.translatable_metadata_fields', []));
+                })->mapWithKeys(function ($field, $key) use ($force) {
+                    return ["metadata[{$key}]" => app(TwillAutoTranslate::class)->translateAttribute(collect($field, $force))->toArray()];
+                });
+
+            $fields = collect($fields)->merge($metadata_fields)->toArray();
         }
 
         return $fields;
