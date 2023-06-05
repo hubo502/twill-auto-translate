@@ -47,18 +47,19 @@ trait HandleAutoTranslate
                     $base_locale = $defaultLocale;
                     $translate_locale = $locale;
 
-                    if (!$string) {
+                    if (! $string) {
                         $result = $string;
                     } else {
-                        $result = ($old_result && !$force)
+                        $result = ($old_result && ! $force)
                             ? $old_result
                             : app(TwillAutoTranslate::class)->translateString($string, $translate_locale, $base_locale);
                     }
+
                     return [$attr => $result];
                 })->toArray();
+
                 return [$locale => $result];
             })->toArray();
-
 
             $model->blocks?->each(function ($block) use ($force) {
                 $content = $this->translateBlockContent($block->content, $force);
@@ -148,12 +149,14 @@ trait HandleAutoTranslate
     protected function blockFieldTranslatable($field)
     {
         $defaultLocale = app(TwillAutoTranslate::class)->getDefaultLocale();
+
         return isset($field[$defaultLocale]);
     }
 
     protected function formatLocalizedField($field)
     {
         $locales = app(TwillAutoTranslate::class)->getLocales();
+
         return collect($locales)->mapWithKeys(function ($locale) use ($field) {
             return [$locale => $field[$locale] ?? null];
         });

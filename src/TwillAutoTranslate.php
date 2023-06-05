@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 class TwillAutoTranslate
 {
     protected $defaultLocale;
+
     protected $locales;
 
     public function __construct()
@@ -18,8 +19,6 @@ class TwillAutoTranslate
 
     /**
      * 可用的语言
-     *
-     * @return array
      */
     public function getLocales(): array
     {
@@ -28,8 +27,6 @@ class TwillAutoTranslate
 
     /**
      * 默认语言
-     *
-     * @return string
      */
     public function getDefaultLocale(): string
     {
@@ -39,11 +36,10 @@ class TwillAutoTranslate
     /**
      * 翻译文本
      *
-     * @param string $string 待翻译内容
-     * @param string $google_translate_locale 要翻译成的语言
-     * @param string $base_locale 待翻译内容的语言
-     * @param bool $with_attributes 是否带参数
-     * @return mixed
+     * @param  string  $string 待翻译内容
+     * @param  string  $google_translate_locale 要翻译成的语言
+     * @param  string  $base_locale 待翻译内容的语言
+     * @param  bool  $with_attributes 是否带参数
      */
     public function translateString(string $string, string $google_translate_locale, string $base_locale, bool $with_attributes = false): mixed
     {
@@ -60,20 +56,17 @@ class TwillAutoTranslate
         }
     }
 
-
-
     /**
      * 翻译字段组
      *
-     * @param Collection $attribute 待翻译内容 {en:"xxx","ja":xxx}
-     * @param bool $forceTranslate 是否强制翻译
-     * @return Collection
+     * @param  Collection  $attribute 待翻译内容 {en:"xxx","ja":xxx}
+     * @param  bool  $forceTranslate 是否强制翻译
      */
     public function translateAttribute(Collection $attribute, bool $forceTranslate = false): Collection
     {
         $base = $attribute->get($this->defaultLocale, null);
 
-        if (!$base) {
+        if (! $base) {
             return $attribute;
         }
 
@@ -86,15 +79,10 @@ class TwillAutoTranslate
 
     /**
      * 判断是否需要翻译该字段
-     *
-     * @param $locale
-     * @param $string
-     * @param bool $forceTranslate
-     * @return bool
      */
     protected function shouldTranslateAttribute($locale, $string, bool $forceTranslate = false): bool
     {
-        return (!$this->isDefaultLocale($locale)) && ($forceTranslate || is_null($string));
+        return (! $this->isDefaultLocale($locale)) && ($forceTranslate || is_null($string));
     }
 
     protected function isDefaultLocale($locale): bool
