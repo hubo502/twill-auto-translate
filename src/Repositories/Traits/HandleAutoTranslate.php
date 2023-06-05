@@ -47,10 +47,10 @@ trait HandleAutoTranslate
                     $base_locale = $defaultLocale;
                     $translate_locale = $locale;
 
-                    if (!$string) {
+                    if (! $string) {
                         $result = $string;
                     } else {
-                        $result = ($old_result && !$force)
+                        $result = ($old_result && ! $force)
                             ? $old_result
                             : app(TwillAutoTranslate::class)->translateString($string, $translate_locale, $base_locale);
                     }
